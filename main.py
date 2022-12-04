@@ -26,9 +26,18 @@ def get_scores(animes):
 
 
 def print_scores(scores):
-    # MAX_LENGTH = 20
+    MAX_LENGTH = 60
+
+    count = sum(list(scores.values()))
+    percentages = {k: scores[k] / count for k in scores.keys()}
+    max_percent = max(percentages.values())
+
     print()
-    print(scores)
+
+    for score, percent in percentages.items():
+        length = int(percent * MAX_LENGTH / max_percent)
+        print(f'{percent:6.2%}  {score:2}: {"-" * length}')
+
     print()
 
 
