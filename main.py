@@ -53,7 +53,8 @@ def print_scores(scores):
 
     print()
 
-    for score, percent in percentages.items():
+    for score in sorted(percentages.keys(), reverse = True):
+        percent = percentages[score]
         length = int(percent * MAX_LENGTH / max_percent)
         print(f'{percent:6.2%}  {score:2}: {"-" * length}')
 
