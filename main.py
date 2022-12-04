@@ -1,15 +1,34 @@
 import json
+import urllib.request
+import html
 
 
 def main():
-    animes = get_animes()
+    username = input('Enter a MyAnimeList username: ')
+    animes = get_animes(username)
     scores = get_scores(animes)
     print_scores(scores)
 
 
-def get_animes():
-    raw = open('table', 'r').read()
-    return json.loads(raw)
+def get_animes(username):
+    fp = urllib.request.urlopen(f'https://myanimelist.net/animelist/{username}')
+    page = fp.read().decode('utf8')
+    fp.close()
+
+    DATA_START = 'data-items="'
+    DATA_END = '"'
+
+    start_index = page.find(DATA_START)
+    if start_index == -1:
+        return None
+    
+    start_index += len(DATA_START)
+    end_index = page.find(DATA_END, start_index + 1)
+    data = page[start_index:end_index]
+    unescaped = html.unescape(data)
+    animes = json.loads(unescaped)
+
+    return animes
 
 
 def get_scores(animes):
